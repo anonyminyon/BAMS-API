@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballAcademyManagementSystemAPI", "BasketballAcademyManagementSystemAPI.csproj", "{A0B10519-62D0-43C1-80F3-53D9484764ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAMS.Tests", "..\BAMS.Tests\BAMS.Tests.csproj", "{6F76DB54-F7B7-4583-8384-18905A75A5B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0B10519-62D0-43C1-80F3-53D9484764ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0B10519-62D0-43C1-80F3-53D9484764ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0B10519-62D0-43C1-80F3-53D9484764ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0B10519-62D0-43C1-80F3-53D9484764ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F76DB54-F7B7-4583-8384-18905A75A5B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F76DB54-F7B7-4583-8384-18905A75A5B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F76DB54-F7B7-4583-8384-18905A75A5B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F76DB54-F7B7-4583-8384-18905A75A5B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+
+server {
+    server_name api.yenhoastorm.com;
+
+    location / {
+        proxy_pass http://localhost:8686;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/api.yenhoastorm.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api.yenhoastorm.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = api.yenhoastorm.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name api.yenhoastorm.com;
+    return 404; # managed by Certbot
+
+
+}
